@@ -1,6 +1,7 @@
 import nodes.Node;
+import java.util.ArrayList;
 
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
   protected int count;
   protected Node<T> head;
 
@@ -40,7 +41,7 @@ public class LinkedList<T> {
     }
   }
 
-  public void insertLast(T x){
+  public void insertLast(T x) {
     insertKesimo(x, count);
   }
 
@@ -53,6 +54,7 @@ public class LinkedList<T> {
     }
     return 0;
   }
+
   public void remove(T item) {
     Node<T> current = this.head;
     Node<T> previous = null;
@@ -74,13 +76,59 @@ public class LinkedList<T> {
       this.count--;
     }
   }
+  //escribeme el metodo sort que ordene el linkedlist, el metodo no recibe nada solo ordena: 
+  public void sort() {
+    Node<T> current = this.head;
+    Node<T> index = null;
+    T temp;
+    if (this.head == null) {
+      return;
+    } else {
+      while (current != null) {
+        index = current.getNext();
+        while (index != null) {
+          if (current.getData().hashCode() > index.getData().hashCode()) {
+            temp = current.getData();
+            current.setData(index.getData());
+            index.setData(temp);
+          }
+          index = index.getNext();
+        }
+        current = current.getNext();
+      }
+    }
+  }
+
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     Node<T> current = this.head;
     while (current != null) {
-      sb.append(current.toString());
+      sb.append(current.toString() + " ");
       current = current.getNext();
     }
     return sb.toString();
+  }
+
+
+  public ArrayList<LinkedList<T>> sort(T x) {
+    ArrayList<LinkedList<T>> result = new ArrayList<LinkedList<T>>();
+    LinkedList<T> less = new LinkedList<T>();
+    LinkedList<T> greater = new LinkedList<T>();
+    Node<T> current = this.head;
+    while (current != null) {
+
+      if (current.getData().compareTo(x) < 0) {
+        less.insertLast(current.getData());
+      } else {
+        greater.insertLast(current.getData());
+      }
+      current = current.getNext();
+    }
+    result.add(greater);
+    result.add(less);
+    greater.sort();
+    less.sort();
+    return result;
   }
 }
