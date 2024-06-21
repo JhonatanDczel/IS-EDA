@@ -13,6 +13,16 @@ public class LinkedList<T> {
     insertKesimo(x, 0);
   }
 
+  public int length() {
+    return this.count;
+  }
+
+  protected void destroyList() {
+    for (Node<T> current = this.head; current != null; current = this.head)
+      remove(current.getData());
+    count = 0;
+  }
+
   public void insertKesimo(T item, int index) {
     if (index == 0) {
       Node<T> newNode = new Node<T>(item);
@@ -32,5 +42,45 @@ public class LinkedList<T> {
 
   public void insertLast(T x){
     insertKesimo(x, count);
+  }
+
+  public int search(T item) {
+    Node<T> current = this.head;
+    while (current != null) {
+      if (current.getData().equals(item))
+        return 1;
+      current = current.getNext();
+    }
+    return 0;
+  }
+  public void remove(T item) {
+    Node<T> current = this.head;
+    Node<T> previous = null;
+    boolean found = false;
+    while (current != null && !found) {
+      if (current.getData().equals(item)) {
+        found = true;
+      } else {
+        previous = current;
+        current = current.getNext();
+      }
+    }
+    if (found) {
+      if (current == this.head) {
+        this.head = this.head.getNext();
+      } else {
+        previous.setNext(current.getNext());
+      }
+      this.count--;
+    }
+  }
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    Node<T> current = this.head;
+    while (current != null) {
+      sb.append(current.toString());
+      current = current.getNext();
+    }
+    return sb.toString();
   }
 }
